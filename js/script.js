@@ -8,82 +8,86 @@ const global = {
     totalResults: 0,
   },
   api: {
-    apiKey: "6d875bdb31404b14597b78bbdcec1a86",
+    // Register your key at https://www.themoviedb.org/settings/api and enter here
+    // Only use this for development or very small projects. You should store your key and make requests from a server
+    apiKey: "3fd2be6f0c70a2a598f084ddfb75487c",
     apiUrl: "https://api.themoviedb.org/3/",
   },
 };
 
-//Display popular 20 Movies
+// Display 20 most popular movies
 async function displayPopularMovies() {
   const { results } = await fetchAPIData("movie/popular");
 
   results.forEach((movie) => {
     const div = document.createElement("div");
     div.classList.add("card");
-    div.innerHTML = ` 
-    <a href="movie-details.html?id=${movie.id}">
-      ${
-        movie.poster_path
-          ? `<img
-        src="https://image.tmdb.org/t/p/w500${movie.poster_path}"
-        class="card-img-top"
-        alt="${movie.title}"
-      />`
-          : `<img
-      src="images/no-image.jpg"
-      class="card-img-top"
-      alt="${movie.title}"
-    />`
-      }
-    </a>
-    <div class="card-body">
-      <h5 class="card-title">${movie.title}</h5>
-      <p class="card-text">
-        <small class="text-muted">Release: ${movie.release_date}</small>
-      </p>
-    </div>
-  `;
+    div.innerHTML = `
+            <a href="movie-details.html?id=${movie.id}">
+              ${
+                movie.poster_path
+                  ? `<img
+                src="https://image.tmdb.org/t/p/w500${movie.poster_path}"
+                class="card-img-top"
+                alt="${movie.title}"
+              />`
+                  : `<img
+              src="../images/no-image.jpg"
+              class="card-img-top"
+              alt="${movie.title}"
+            />`
+              }
+            </a>
+            <div class="card-body">
+              <h5 class="card-title">${movie.title}</h5>
+              <p class="card-text">
+                <small class="text-muted">Release: ${movie.release_date}</small>
+              </p>
+            </div>
+          `;
 
     document.querySelector("#popular-movies").appendChild(div);
   });
 }
 
-//Display popular 20 TV shows
+// Display 20 most popular tv shows
 async function displayPopularShows() {
   const { results } = await fetchAPIData("tv/popular");
 
   results.forEach((show) => {
     const div = document.createElement("div");
     div.classList.add("card");
-    div.innerHTML = ` 
-      <a href="tv-details.html?id=${show.id}">
-        ${
-          show.poster_path
-            ? `<img
-          src="https://image.tmdb.org/t/p/w500${show.poster_path}"
-          class="card-img-top"
-          alt="${show.name}"
-        />`
-            : `<img
-        src="images/no-image.jpg"
-        class="card-img-top"
-        alt="${show.name}"
-      />`
-        }
-      </a>
-      <div class="card-body">
-        <h5 class="card-title">${show.name}</h5>
-        <p class="card-text">
-          <small class="text-muted">Air Date: ${show.first_air_date}</small>
-        </p>
-      </div>
-    `;
+    div.innerHTML = `
+            <a href="tv-details.html?id=${show.id}">
+              ${
+                show.poster_path
+                  ? `<img
+                src="https://image.tmdb.org/t/p/w500${show.poster_path}"
+                class="card-img-top"
+                alt="${show.name}"
+              />`
+                  : `<img
+              src="../images/no-image.jpg"
+              class="card-img-top"
+              alt="${show.name}"
+            />`
+              }
+            </a>
+            <div class="card-body">
+              <h5 class="card-title">${show.name}</h5>
+              <p class="card-text">
+                <small class="text-muted">Air Date: ${
+                  show.first_air_date
+                }</small>
+              </p>
+            </div>
+          `;
 
     document.querySelector("#popular-shows").appendChild(div);
   });
 }
 
-//Display Movie details
+// Display Movie Details
 async function displayMovieDetails() {
   const movieId = window.location.search.split("=")[1];
 
@@ -94,65 +98,69 @@ async function displayMovieDetails() {
 
   const div = document.createElement("div");
 
-  div.innerHTML = `<div class="details-top">
-  <div>
-  ${
-    movie.poster_path
-      ? `<img
-    src="https://image.tmdb.org/t/p/w500${movie.poster_path}"
+  div.innerHTML = `
+    <div class="details-top">
+    <div>
+    ${
+      movie.poster_path
+        ? `<img
+      src="https://image.tmdb.org/t/p/w500${movie.poster_path}"
+      class="card-img-top"
+      alt="${movie.title}"
+    />`
+        : `<img
+    src="../images/no-image.jpg"
     class="card-img-top"
     alt="${movie.title}"
   />`
-      : `<img
-  src="images/no-image.jpg"
-  class="card-img-top"
-  alt="${movie.title}"
-/>`
-  }
+    }
+    </div>
+    <div>
+      <h2>${movie.title}</h2>
+      <p>
+        <i class="fas fa-star text-primary"></i>
+        ${movie.vote_average.toFixed(1)} / 10
+      </p>
+      <p class="text-muted">Release Date: ${movie.release_date}</p>
+      <p>
+        ${movie.overview}
+      </p>
+      <h5>Genres</h5>
+      <ul class="list-group">
+        ${movie.genres.map((genre) => `<li>${genre.name}</li>`).join("")}
+      </ul>
+      <a href="${
+        movie.homepage
+      }" target="_blank" class="btn">Visit Movie Homepage</a>
+    </div>
   </div>
-  <div>
-    <h2>${movie.title}</h2>
-    <p>
-      <i class="fas fa-star text-primary"></i>
-      ${movie.vote_average.toFixed(1)} / 10
-    </p>
-    <p class="text-muted">Release Date:${movie.release_date}</p>
-    <p>
-    ${movie.overview}
-    </p>
-    <h5>Genres</h5>
-    <ul class="list-group">
-    ${movie.genres.map((genre) => `<li>${genre.name}</li>`).join("")}
+  <div class="details-bottom">
+    <h2>Movie Info</h2>
+    <ul>
+      <li><span class="text-secondary">Budget:</span> $${addCommasToNumber(
+        movie.budget
+      )}</li>
+      <li><span class="text-secondary">Revenue:</span> $${addCommasToNumber(
+        movie.revenue
+      )}</li>
+      <li><span class="text-secondary">Runtime:</span> ${
+        movie.runtime
+      } minutes</li>
+      <li><span class="text-secondary">Status:</span> ${movie.status}</li>
     </ul>
-    <a href="${
-      movie.homepage
-    }" target="_blank" class="btn">Visit Movie Homepage</a>
+    <h4>Production Companies</h4>
+    <div class="list-group">
+      ${movie.production_companies
+        .map((company) => `<span>${company.name}</span>`)
+        .join(", ")}
+    </div>
   </div>
-</div>
-<div class="details-bottom">
-  <h2>Movie Info</h2>
-  <ul>
-    <li><span class="text-secondary">Budget:</span>  $${addCommasToNumber(
-      movie.budget
-    )}</li>
-    <li><span class="text-secondary">Revenue:</span> $${addCommasToNumber(
-      movie.revenue
-    )}</li>
-    <li><span class="text-secondary">Runtime:</span> ${addCommasToNumber(
-      movie.runtime
-    )} minutes</li>
-    <li><span class="text-secondary">Status:</span> ${movie.status}</li>
-  </ul>
-  <h4>Production Companies</h4>
-  <div class="list-group">${movie.production_companies
-    .map((company) => `<span>${company.name} </span>`)
-    .join("")}</div>
-</div>`;
+    `;
 
   document.querySelector("#movie-details").appendChild(div);
 }
 
-//Display Show details
+// Display Show Details
 async function displayShowDetails() {
   const showId = window.location.search.split("=")[1];
 
@@ -163,7 +171,8 @@ async function displayShowDetails() {
 
   const div = document.createElement("div");
 
-  div.innerHTML = `<div class="details-top">
+  div.innerHTML = `
+    <div class="details-top">
     <div>
     ${
       show.poster_path
@@ -173,7 +182,7 @@ async function displayShowDetails() {
       alt="${show.name}"
     />`
         : `<img
-    src="images/no-image.jpg"
+    src="../images/no-image.jpg"
     class="card-img-top"
     alt="${show.name}"
   />`
@@ -185,35 +194,38 @@ async function displayShowDetails() {
         <i class="fas fa-star text-primary"></i>
         ${show.vote_average.toFixed(1)} / 10
       </p>
-      <p class="text-muted">Last Air Date:${show.last_air_date}</p>
+      <p class="text-muted">Last Air Date: ${show.last_air_date}</p>
       <p>
-      ${show.overview}
+        ${show.overview}
       </p>
       <h5>Genres</h5>
       <ul class="list-group">
-      ${show.genres.map((genre) => `<li>${genre.name}</li>`).join("")}
+        ${show.genres.map((genre) => `<li>${genre.name}</li>`).join("")}
       </ul>
       <a href="${
         show.homepage
-      }" target="_blank" class="btn">Visit Show Homepage</a>
+      }" target="_blank" class="btn">Visit show Homepage</a>
     </div>
   </div>
   <div class="details-bottom">
     <h2>Show Info</h2>
     <ul>
-      <li><span class="text-secondary">Number of Episodes:</span>  ${
+      <li><span class="text-secondary">Number of Episodes:</span> ${
         show.number_of_episodes
       }</li>
-      <li><span class="text-secondary">Last Episode to Air:</span> ${
+      <li><span class="text-secondary">Last Episode To Air:</span> ${
         show.last_episode_to_air.name
       }</li>
       <li><span class="text-secondary">Status:</span> ${show.status}</li>
     </ul>
     <h4>Production Companies</h4>
-    <div class="list-group">${show.production_companies
-      .map((company) => `<span>${company.name} </span>`)
-      .join("")}</div>
-  </div>`;
+    <div class="list-group">
+      ${show.production_companies
+        .map((company) => `<span>${company.name}</span>`)
+        .join(", ")}
+    </div>
+  </div>
+    `;
 
   document.querySelector("#show-details").appendChild(div);
 }
@@ -240,7 +252,7 @@ function displayBackgroundImage(type, backgroundPath) {
   }
 }
 
-//Search Movies/Shows
+// Search Movies/Shows
 async function search() {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -251,6 +263,10 @@ async function search() {
   if (global.search.term !== "" && global.search.term !== null) {
     const { results, total_pages, page, total_results } = await searchAPIData();
 
+    global.search.page = page;
+    global.search.totalPages = total_pages;
+    global.search.totalResults = total_results;
+
     if (results.length === 0) {
       showAlert("No results found");
       return;
@@ -260,49 +276,148 @@ async function search() {
 
     document.querySelector("#search-term").value = "";
   } else {
-    showAlert("Please enter search term", "error");
+    showAlert("Please enter a search term");
   }
 }
 
 function displaySearchResults(results) {
+  // Clear previous results
+  document.querySelector("#search-results").innerHTML = "";
+  document.querySelector("#search-results-heading").innerHTML = "";
+  document.querySelector("#pagination").innerHTML = "";
+
   results.forEach((result) => {
     const div = document.createElement("div");
     div.classList.add("card");
-    div.innerHTML = ` 
-        <a href="${global.search.type}-details.html?id=${result.id}">
-          ${
-            result.poster_path
-              ? `<img
-            src="https://image.tmdb.org/t/p/w500/${result.poster_path}"
-            class="card-img-top"
-            alt="${global.search.type === "movie" ? result.title : result.name}"
-          />`
-              : `<img
-          src="images/no-image.jpg"
-          class="card-img-top"
-          alt="${global.search.type === "movie" ? result.title : result.name}"
-        />`
-          }
-        </a>
-        <div class="card-body">
-          <h5 class="card-title">${
-            global.search.type === "movie" ? result.title : result.name
-          }</h5>
-          <p class="card-text">
-            <small class="text-muted">Release: ${
-              global.search.type === "movie"
-                ? result.release_date
-                : result.first_air_date
-            }</small>
-          </p>
-        </div>
+    div.innerHTML = `
+            <a href="${global.search.type}-details.html?id=${result.id}">
+              ${
+                result.poster_path
+                  ? `<img
+                src="https://image.tmdb.org/t/p/w500${result.poster_path}"
+                class="card-img-top"
+                alt="${
+                  global.search.type === "movie" ? result.title : result.name
+                }"
+              />`
+                  : `<img
+              src="../images/no-image.jpg"
+              class="card-img-top"
+               alt="${
+                 global.search.type === "movie" ? result.title : result.name
+               }"
+            />`
+              }
+            </a>
+            <div class="card-body">
+              <h5 class="card-title">${
+                global.search.type === "movie" ? result.title : result.name
+              }</h5>
+              <p class="card-text">
+                <small class="text-muted">Release: ${
+                  global.search.type === "movie"
+                    ? result.release_date
+                    : result.first_air_date
+                }</small>
+              </p>
+            </div>
+          `;
+
+    document.querySelector("#search-results-heading").innerHTML = `
+                <h2>${results.length} of ${global.search.totalResults} Results for ${global.search.term}</h2>
       `;
 
     document.querySelector("#search-results").appendChild(div);
   });
+
+  displayPagination();
 }
 
-//Fetch data from TMDB API
+// Create & Display Pagination For Search
+function displayPagination() {
+  const div = document.createElement("div");
+  div.classList.add("pagination");
+  div.innerHTML = `
+    <button class="btn btn-primary" id="prev">Prev</button>
+    <button class="btn btn-primary" id="next">Next</button>
+    <div class="page-counter">Page ${global.search.page} of ${global.search.totalPages}</div>
+    `;
+
+  document.querySelector("#pagination").appendChild(div);
+
+  // Disable prev button if on first page
+  if (global.search.page === 1) {
+    document.querySelector("#prev").disabled = true;
+  }
+
+  // Disable next button if on last page
+  if (global.search.page === global.search.totalPages) {
+    document.querySelector("#next").disabled = true;
+  }
+
+  // Next page
+  document.querySelector("#next").addEventListener("click", async () => {
+    global.search.page++;
+    const { results, total_pages } = await searchAPIData();
+    displaySearchResults(results);
+  });
+
+  // Prev page
+  document.querySelector("#prev").addEventListener("click", async () => {
+    global.search.page--;
+    const { results, total_pages } = await searchAPIData();
+    displaySearchResults(results);
+  });
+}
+
+// Display Slider Movies
+async function displaySlider() {
+  const { results } = await fetchAPIData("movie/now_playing");
+
+  results.forEach((movie) => {
+    const div = document.createElement("div");
+    div.classList.add("swiper-slide");
+
+    div.innerHTML = `
+        <a href="movie-details.html?id=${movie.id}">
+          <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" />
+        </a>
+        <h4 class="swiper-rating">
+          <i class="fas fa-star text-secondary"></i> ${movie.vote_average} / 10
+        </h4>
+      `;
+
+    document.querySelector(".swiper-wrapper").appendChild(div);
+
+    initSwiper();
+  });
+}
+
+function initSwiper() {
+  const swiper = new Swiper(".swiper", {
+    slidesPerView: 1,
+    spaceBetween: 30,
+    freeMode: true,
+    loop: true,
+    autoplay: {
+      delay: 4000,
+      disableOnInteraction: false,
+    },
+    breakpoints: {
+      500: {
+        slidesPerView: 2,
+      },
+      700: {
+        slidesPerView: 3,
+      },
+      1200: {
+        slidesPerView: 4,
+      },
+    },
+  });
+}
+
+// Fetch data from TMDB API
 async function fetchAPIData(endpoint) {
   const API_KEY = global.api.apiKey;
   const API_URL = global.api.apiUrl;
@@ -338,6 +453,14 @@ async function searchAPIData() {
   return data;
 }
 
+function showSpinner() {
+  document.querySelector(".spinner").classList.add("show");
+}
+
+function hideSpinner() {
+  document.querySelector(".spinner").classList.remove("show");
+}
+
 // Highlight active link
 function highlightActiveLink() {
   const links = document.querySelectorAll(".nav-link");
@@ -348,7 +471,7 @@ function highlightActiveLink() {
   });
 }
 
-//Show Alert
+// Show Alert
 function showAlert(message, className = "error") {
   const alertEl = document.createElement("div");
   alertEl.classList.add("alert", className);
@@ -358,65 +481,11 @@ function showAlert(message, className = "error") {
   setTimeout(() => alertEl.remove(), 3000);
 }
 
-//Display slider movies
-async function displaySlider() {
-  const { results } = await fetchAPIData("movie/now_playing");
-
-  results.forEach((movie) => {
-    const div = document.createElement("div");
-    div.classList.add("swiper-slide");
-
-    div.innerHTML = `
-    <a href="movie-details.html?id=${movie.id}">
-      <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" />
-    </a>
-    <h4 class="swiper-rating">
-      <i class="fas fa-star text-secondary"></i> ${movie.vote_average} / 10
-    </h4>
-    `;
-
-    document.querySelector(".swiper-wrapper").appendChild(div);
-
-    initSwiper();
-  });
-}
-
-function initSwiper() {
-  const swiper = new Swiper(".swiper", {
-    slidesPerView: 1,
-    spaceBetween: 30,
-    freeMode: true,
-    loop: true,
-    autoPlay: {
-      delay: 4000,
-      disableOnInteraction: false,
-    },
-    breakpoints: {
-      500: {
-        slidesPerView: 2,
-      },
-      700: {
-        slidesPerView: 3,
-      },
-      1200: {
-        slidesPerView: 4,
-      },
-    },
-  });
-}
-
-function showSpinner() {
-  document.querySelector(".spinner").classList.add("show");
-}
-function hideSpinner() {
-  document.querySelector(".spinner").classList.remove("show");
-}
-
 function addCommasToNumber(number) {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-//init app (witch page run)
+// Init App
 function init() {
   switch (global.currentPage) {
     case "/":
@@ -440,4 +509,5 @@ function init() {
 
   highlightActiveLink();
 }
+
 document.addEventListener("DOMContentLoaded", init);
