@@ -13,7 +13,7 @@ const global = {
   },
 };
 
-// Display 20 most popular movies
+// Display 20 most popular Movies
 async function displayPopularMovies() {
   const { results } = await fetchAPIData("movie/popular");
 
